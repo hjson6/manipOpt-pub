@@ -1,0 +1,20 @@
+cmake_minimum_required(VERSION 3.8)
+project(pick_place_interfaces)
+
+find_package(ament_cmake REQUIRED)
+find_package(rosidl_default_generators REQUIRED)
+find_package(geometry_msgs REQUIRED)
+
+rosidl_generate_interfaces(${PROJECT_NAME}
+  "action/Pick.action"
+  "action/Place.action"
+  "action/MoveTo.action"
+  DEPENDENCIES geometry_msgs
+)
+
+if(BUILD_TESTING)
+  find_package(ament_lint_auto REQUIRED)
+  ament_lint_auto_find_test_dependencies()
+endif()
+
+ament_package()

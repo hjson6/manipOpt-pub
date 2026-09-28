@@ -1,0 +1,141 @@
+<mujoco model="panda_torque_scene_container">
+  <!--
+    Container pick-and-place scene: the robot (panda_robot.xml), a pile of 8
+    mixed-size boxes and a destination tray. Boxes and tray have contacts;
+    boxes rest by gravity. The grasp is one shared box_carry weld, repointed
+    at the held box (mujoco_sim_node), standing in for a suction cup.
+  -->
+  <include file="panda_robot.xml"/>
+
+  <visual>
+    <headlight diffuse="0.6 0.6 0.6" ambient="0.3 0.3 0.3" specular="0 0 0"/>
+    <rgba haze="0.15 0.25 0.35 1"/>
+    <global azimuth="120" elevation="-20"/>
+  </visual>
+
+  <asset>
+    <texture type="skybox" builtin="gradient" rgb1="0.3 0.5 0.7" rgb2="0 0 0" width="512" height="3072"/>
+    <texture type="2d" name="groundplane" builtin="checker" mark="edge" rgb1="0.2 0.3 0.4" rgb2="0.1 0.2 0.3"
+      markrgb="0.8 0.8 0.8" width="300" height="300"/>
+    <material name="groundplane" texture="groundplane" texuniform="true" texrepeat="5 5" reflectance="0.2"/>
+  </asset>
+
+  <default>
+    <default class="box">
+      <geom condim="4" friction="0.6 0.01 0.001"/>
+    </default>
+  </default>
+
+  <worldbody>
+    <light pos="0 0 1.5" dir="0 0 -1" directional="true"/>
+    <geom name="floor" size="0 0 0.05" type="plane" material="groundplane"/>
+
+    <!-- Wrist depth camera. A mocap body that mujoco_sim_node moves to the
+         gripper for each scan (camera mode="track" does not move it in this
+         MuJoCo build). Looks straight down, local x/y on world x/y. -->
+    <body name="container_cam_mount" mocap="true" pos="0.45 0.25 1.0">
+      <camera name="container_cam" xyaxes="1 0 0 0 1 0" fovy="55"/>
+    </body>
+
+    <!-- Overhead obstacle-sensing camera, 3.5 m up, straight down. pos and
+         fovy must match WORKSPACE_CAM_POS and WORKSPACE_CAM_FOVY_DEG in
+         scene.py (the detector's calibration). -->
+    <camera name="workspace_cam" pos="0.0 -0.20 3.5" xyaxes="1 0 0 0 1 0" fovy="70"/>
+
+    <!-- Starting pile: 8 boxes of mixed sizes (half-extents 0.030 x 0.030 x
+         0.0375 up to 0.075 x 0.060 x 0.045 m), from an offline packing script
+         (not in the repo). 0, 1, 2 and 4 stand on the floor; 3, 5, 6 and 7 on
+         other boxes.
+         diaginertia is the solid-box formula for each box's size. The
+         cbox_* count must match N_BOXES in scene.py, and the tallest top
+         (0.195 m) SOURCE_MAX_HEIGHT. -->
+    <body name="cbox_0" pos="0.3937 0.3187 0.0450">
+      <freejoint/>
+      <inertial mass="0.2" pos="0 0 0" diaginertia="3.75e-04 5.10e-04 6.15e-04"/>
+      <geom type="box" size="0.0750 0.0600 0.0450" rgba="0.65 0.45 0.10 1" class="box"/>
+    </body>
+    <body name="cbox_1" pos="0.3863 0.1837 0.0525">
+      <freejoint/>
+      <inertial mass="0.2" pos="0 0 0" diaginertia="4.88e-04 4.88e-04 6.08e-04"/>
+      <geom type="box" size="0.0675 0.0675 0.0525" rgba="0.85 0.65 0.20 1" class="box"/>
+    </body>
+    <body name="cbox_2" pos="0.5137 0.1987 0.0600">
+      <freejoint/>
+      <inertial mass="0.2" pos="0 0 0" diaginertia="4.24e-04 4.24e-04 3.68e-04"/>
+      <geom type="box" size="0.0525 0.0525 0.0600" rgba="0.65 0.45 0.10 1" class="box"/>
+    </body>
+    <body name="cbox_3" pos="0.3863 0.3037 0.1275">
+      <freejoint/>
+      <inertial mass="0.2" pos="0 0 0" diaginertia="2.29e-04 3.34e-04 3.75e-04"/>
+      <geom type="box" size="0.0600 0.0450 0.0375" rgba="0.85 0.65 0.20 1" class="box"/>
+    </body>
+    <body name="cbox_4" pos="0.5212 0.3037 0.0450">
+      <freejoint/>
+      <inertial mass="0.2" pos="0 0 0" diaginertia="2.70e-04 2.70e-04 2.70e-04"/>
+      <geom type="box" size="0.0450 0.0450 0.0450" rgba="0.65 0.45 0.10 1" class="box"/>
+    </body>
+    <body name="cbox_5" pos="0.3638 0.1763 0.1500">
+      <freejoint/>
+      <inertial mass="0.2" pos="0 0 0" diaginertia="3.19e-04 2.29e-04 2.78e-04"/>
+      <geom type="box" size="0.0375 0.0525 0.0450" rgba="0.85 0.65 0.20 1" class="box"/>
+    </body>
+    <body name="cbox_6" pos="0.4912 0.2963 0.1425">
+      <freejoint/>
+      <inertial mass="0.2" pos="0 0 0" diaginertia="2.78e-04 2.78e-04 1.88e-04"/>
+      <geom type="box" size="0.0375 0.0375 0.0525" rgba="0.65 0.45 0.10 1" class="box"/>
+    </body>
+    <body name="cbox_7" pos="0.4912 0.1837 0.1575">
+      <freejoint/>
+      <inertial mass="0.2" pos="0 0 0" diaginertia="1.54e-04 1.54e-04 1.20e-04"/>
+      <geom type="box" size="0.0300 0.0300 0.0375" rgba="0.85 0.65 0.20 1" class="box"/>
+    </body>
+
+    <!-- Destination tray (floor and 4 walls): for obstacle
+         avoidance, display and contact. Must match DEST_TRAY_* in scene.py; MJCF has
+         no expressions, so the numbers are literal. -->
+    <geom name="dest_tray_floor" type="box" pos="-0.3000 -0.4250 -0.0050" size="0.2250 0.1500 0.0050"
+      rgba="0.5 0.5 0.5 1"/>
+    <geom name="dest_tray_wall_west" type="box" pos="-0.5200 -0.4250 0.1100" size="0.0050 0.1500 0.1100"
+      rgba="0.5 0.5 0.5 1"/>
+    <geom name="dest_tray_wall_east" type="box" pos="-0.0800 -0.4250 0.1100" size="0.0050 0.1500 0.1100"
+      rgba="0.5 0.5 0.5 1"/>
+    <geom name="dest_tray_wall_south" type="box" pos="-0.3000 -0.5700 0.1100" size="0.2250 0.0050 0.1100"
+      rgba="0.5 0.5 0.5 1"/>
+    <geom name="dest_tray_wall_north" type="box" pos="-0.3000 -0.2800 0.1100" size="0.2250 0.0050 0.1100"
+      rgba="0.5 0.5 0.5 1"/>
+
+    <!-- Sphere obstacle (the "static" carton scenario), a mocap body moved by
+         mujoco_sim_node from /env/dynamic_obstacle and resized to the
+         radius in each message. Parked below the floor when absent. Opaque:
+         a translucent geom does not reliably write depth. The controller
+         only sees it through workspace_cam. -->
+    <body name="dynamic_obstacle" mocap="true" pos="0.9 0.9 -0.3">
+      <geom type="sphere" size="0.10" rgba="0.9 0.15 0.1 1" contype="0" conaffinity="0"/>
+    </body>
+    <!-- Person for the "visit" and "walk" modes, half scale to match the
+         half-scale cell (0.84 m tall). Mocap, parked below the floor when
+         absent; its +x is the way the person faces. Seen by the robot only
+         through workspace_cam. Keep in sync with
+         dynamic_obstacle_node.PERSON_*. -->
+    <body name="person_obstacle" mocap="true" pos="0.9 0.9 -3.0">
+      <geom name="person_leg_l" type="capsule" fromto="0 0.045 0.04 0 0.045 0.425" size="0.0375" rgba="0.20 0.25 0.40 1" contype="0" conaffinity="0"/>
+      <geom name="person_leg_r" type="capsule" fromto="0 -0.045 0.04 0 -0.045 0.425" size="0.0375" rgba="0.20 0.25 0.40 1" contype="0" conaffinity="0"/>
+      <geom name="person_torso" type="box" pos="0 0 0.575" size="0.06 0.10 0.14" rgba="0.85 0.45 0.15 1" contype="0" conaffinity="0"/>
+      <geom name="person_arm_l" type="capsule" fromto="0 0.1225 0.40 0 0.1225 0.69" size="0.0225" rgba="0.85 0.45 0.15 1" contype="0" conaffinity="0"/>
+      <geom name="person_arm_r" type="capsule" fromto="0 -0.1225 0.40 0 -0.1225 0.69" size="0.0225" rgba="0.85 0.45 0.15 1" contype="0" conaffinity="0"/>
+      <geom name="person_head" type="sphere" pos="0 0 0.79" size="0.05" rgba="0.90 0.75 0.60 1" contype="0" conaffinity="0"/>
+    </body>
+  </worldbody>
+
+  <equality>
+    <!-- Shared by all boxes: mujoco_sim_node sets body2 and relpose at each
+         pick. -->
+    <weld name="box_carry" body1="attachment" body2="cbox_0" active="false"/>
+  </equality>
+
+  <!-- Wrist force/torque sensor (a flange load cell). -->
+  <sensor>
+    <force name="wrist_force" site="attachment_site"/>
+    <torque name="wrist_torque" site="attachment_site"/>
+  </sensor>
+</mujoco>

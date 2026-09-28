@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>pick_place_mpc</name>
+  <version>0.1.0</version>
+  <description>
+    Receding-horizon MPC method for the container pick-and-place task:
+    an acados SQP_RTI controller computing joint torques every tick, plus
+    the task node that turns sensed scans into pick/place decisions and a
+    jerk-limited reference for the controller to track. Scene, sensing,
+    and plant all come from pick_place_common.
+  </description>
+  <maintainer email="hojinsong95@gmail.com">hojin</maintainer>
+  <license>MIT</license>
+
+  <depend>rclpy</depend>
+  <depend>sensor_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>std_msgs</depend>
+  <depend>pick_place_common</depend>
+
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
+</package>

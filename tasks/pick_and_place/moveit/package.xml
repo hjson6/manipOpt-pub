@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>pick_place_moveit</name>
+  <version>0.1.0</version>
+  <description>
+    MoveIt2 + MoveIt Task Constructor method for the container pick-and-place
+    task: real MTC stage graph (C++), a FollowJointTrajectory-to-torque
+    bridge node, and a decision node mirroring pick_place_mpc's scan/decide
+    logic. Scene, sensing, and plant all come from pick_place_common, same
+    as the MPC method. Full run: `ros2 launch pick_place_moveit demo.launch.py`.
+  </description>
+  <maintainer email="hojinsong95@gmail.com">hojin</maintainer>
+  <license>MIT</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <depend>rclcpp</depend>
+  <depend>rclcpp_action</depend>
+  <depend>ament_index_cpp</depend>
+  <depend>control_msgs</depend>
+  <depend>sensor_msgs</depend>
+  <depend>trajectory_msgs</depend>
+  <!-- conda-forge's pinocchio, not a rosdep key; find_package() finds it
+       through CMAKE_PREFIX_PATH. Listed for documentation. -->
+  <depend>pinocchio</depend>
+  <depend>geometry_msgs</depend>
+  <depend>shape_msgs</depend>
+  <depend>std_msgs</depend>
+  <depend>moveit_core</depend>
+  <depend>pick_place_interfaces</depend>
+  <!-- Built from source in ~/mtc_ws (not in RoboStack), not a rosdep key;
+       found once that overlay is sourced (scripts/env.sh). -->
+  <depend>moveit_task_constructor_core</depend>
+
+  <!-- decision_node.py (Python, installed as a program) -->
+  <exec_depend>rclpy</exec_depend>
+  <exec_depend>moveit_msgs</exec_depend>
+  <exec_depend>pick_place_common</exec_depend>
+
+  <exec_depend>moveit_ros_move_group</exec_depend>
+  <exec_depend>moveit_ros_planning_interface</exec_depend>
+  <exec_depend>moveit_planners_ompl</exec_depend>
+  <exec_depend>moveit_simple_controller_manager</exec_depend>
+  <exec_depend>moveit_resources_panda_description</exec_depend>
+  <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>joint_state_publisher</exec_depend>
+  <exec_depend>tf2_ros</exec_depend>
+  <exec_depend>rviz2</exec_depend>
+  <exec_depend>xacro</exec_depend>
+
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
