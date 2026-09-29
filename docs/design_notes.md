@@ -148,7 +148,7 @@ as a named future extension, not attempted in this project.
 
 The manipulator's own joint feedback (q, q_dot) is real, continuous sim
 feedback, standing in for encoders. Two perception pipelines sit on top,
-deliberately separate (`obstacle-handling-spec.md`, sec. 2):
+deliberately separate (`handover_notes/obstacle-handling-spec.md`, sec. 2):
 
 - the **wrist camera** (`container_cam`) owns pick and place: heightmap,
   box segmentation, grasp and slot choice. It is not a safety sensor and
