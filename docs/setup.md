@@ -184,3 +184,28 @@ start actually commanding the plant.
 Everything (plant, task decision node, controller) runs as ROS2 nodes in
 the same WSL2 environment — no cross-machine/cross-OS bridging needed,
 unlike the Isaac Sim-on-Windows plan this replaced.
+
+## MoveIt method (optional, parked)
+
+`pick_place_moveit` needs MoveIt Task Constructor, which RoboStack doesn't
+package, so it's built from source in its own workspace `~/mtc_ws`
+(humble branch). The MoveIt packages themselves come from
+`environment.yml`.
+```bash
+mkdir -p ~/mtc_ws/src && cd ~/mtc_ws/src
+git clone --depth 1 -b humble https://github.com/moveit/moveit_task_constructor.git
+# local patch: add `#include <fmt/ranges.h>` after `#include <fmt/format.h>` in
+# moveit_task_constructor/capabilities/src/execute_task_solution_capability.cpp
+# (conda-forge fmt no longer pulls it in; fmt::join won't compile without it)
+cd ~/mtc_ws && colcon build --symlink-install
+```
+`scripts/env.sh` sources `~/mtc_ws` when it exists and puts
+`$CONDA_PREFIX/lib` on `LD_LIBRARY_PATH` (the overlay has no conda RPATH;
+without it `mtc_executor_node` dies at startup). Then, from this repo:
+```bash
+source scripts/env.sh
+colcon build --symlink-install --packages-select pick_place_interfaces pick_place_moveit
+ros2 launch pick_place_moveit demo.launch.py   # render:=false visualize_pickup:=false for headless
+```
+Don't run it alongside the MPC launch: each starts its own `mujoco_sim_node`
+and both drive `/sim/joint_command`.
