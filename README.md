@@ -16,9 +16,10 @@ plant.
 Structured as `task / method`, not as one monolithic pipeline: a task
 (currently one — container pick-and-place) is solved by one or more
 methods that share the same scene, sensing, and plant, differing only in
-how they actually move the arm. MPC is the first method implemented; the
-point of the split is to make a second method an honest comparison
-against the same task later, not a rewrite.
+how they actually move the arm. MPC is the main method; a second one
+(MoveIt 2 + MoveIt Task Constructor) exists but is parked. The point of
+the split is to make the second method an honest comparison against the
+same task, not a rewrite.
 
 ## Why this design
 
@@ -87,13 +88,22 @@ tasks/pick_and_place/
                                     method must agree on to be solving the same task
   mpc/                             ROS2 pkg pick_place_mpc: this task's MPC method --
                                     task_node (sensed decisions) + mpc_controller
-benchmarks/                        cross-method comparison harnesses and results
+  moveit/                          ROS2 pkg pick_place_moveit (C++): the MoveIt/MTC method
+                                    (parked) -- decision node, MTC executor, torque bridge
+  interfaces/                      ROS2 pkg pick_place_interfaces: MoveTo/Pick/Place actions
+scripts/                           launch scripts, env.sh; dev/ holds offline replay,
+                                    batch runs and measurement tools
+benchmarks/                        cross-method comparison harnesses and results (empty)
+docs/system_overview.md            how the whole system works, end to end
 docs/design_notes.md               design rationale (the "why" behind each choice)
+docs/implementation_notes.md       per-module details and the reasons behind them
 docs/setup.md                      local WSL setup: conda env, acados build, ROS2, MuJoCo assets
+known_issues.md                    open problems, evidence and next steps
+figures/                           plots and renders referenced from the docs
+handover_notes/                    working notes and plans between sessions (not maintained docs)
 ```
-A second method for this task would be a new package alongside `mpc/`,
-importing the same `common/` and `perception/` — not a copy of the scene
-or the sensing.
+The MoveIt method is a separate package alongside `mpc/`, importing the
+same `common/` and `perception/` — not a copy of the scene or the sensing.
 
 ## Status
 
@@ -108,19 +118,30 @@ rather than hardcoded:
   first — the standard decreasing-size bin-packing heuristic, since
   placing big items while destination space is still open avoids
   fragmenting it down to gaps only small items fit.
-- **How tall the box actually is**: not visible to a single top-down
-  camera before it's grasped (a real limitation, not simulated), so
-  height is read once at grasp time from the gripper's own contact —
-  mirroring real force/proximity sensing or a barcode lookup — and never
-  used to decide where or which box to pick, only how to place it after.
-- **Where to place it**: a second depth scan of the destination finds the
-  lowest flat spot sized to the box actually in hand, scored by how much
-  of each edge touches a wall or neighboring box (not just whether it
-  touches at all) so placement packs tightly instead of leaving
-  unusable slivers — provably fills the floor before stacking a second
-  layer anywhere.
-- **Level carry**: the gripper is held pointing straight down for the whole
-  cycle, carry legs included (measured: at most ~2.6 deg of tilt per carry).
+  A box is only picked once nothing rests on it.
+- **What size the box is**: its footprint and the grasp's in-hand offset
+  come from the pick scan's depth pixels. Its height isn't visible to a
+  top-down camera before it's grasped (a real limitation, not simulated),
+  so it's read from a force-sensed touch-down at the wrist, and never used
+  to decide where or which box to pick, only how to place it.
+- **Where to place it**: a depth scan of the destination finds a flat spot
+  sized to the box actually in hand. Packing is compact, with an optional
+  90 deg turn at the tray, and only picks spots the robot can actually
+  finish. Every tray scan re-measures the boxes already placed; a blocked
+  place lifts, rescans and re-plans.
+- **Place-then-push**: the wrist can't set a box flush against a tray wall
+  without hitting it, so wall spots are set down clear and pushed back with
+  the tool tilted, the lean chosen from the scan. Push points are never
+  predefined.
+- **Physics, not scripting**: boxes and tray have contacts and rest by
+  gravity; the only weld is the grasp (a suction-cup stand-in). Both
+  cameras get depth noise.
+- **Model mismatch**: the plant differs from the controller's model
+  (joint friction, damping, armature, link and box masses; seeded). The
+  OCP carries the payload using the mass from the wrist load cell, and a
+  goal-bias integrator removes steady offsets once the reference stops.
+- **Level carry**: the gripper points straight down for the whole cycle
+  apart from pushes, carry legs included (measured: 0.1-0.6 deg of tilt).
   Long moves swing round the base on an arc, and the box turns with the
   base like on a palletizing robot, arriving square to the pallet.
 - **Orientation**: a second gripper-axis constraint (not just "point
@@ -163,7 +184,20 @@ simulation, so this is a software stand-in, not a safety function. Design,
 measured results and limits: `docs/design_notes.md`; open problems:
 [`known_issues.md`](known_issues.md).
 
-**Not yet built**: a second method for this task, and the benchmarking below.
+**MoveIt method, parked** (`ros2 launch pick_place_moveit demo.launch.py`;
+needs the `~/mtc_ws` overlay, see `docs/setup.md`) — MoveIt 2 + MoveIt Task
+Constructor (C++), driven by a decision node that makes the same sensed
+decisions as the MPC `task_node`, executed on the same MuJoCo plant through a
+FollowJointTrajectory-to-torque bridge. It completed full autonomous runs on
+an earlier big-box scene; on the current scene it has no push, touch-down or
+tray re-measure, still reads the grasped box size from the simulator, and
+hasn't been re-validated since contacts were switched on. Never run it at the
+same time as the MPC launch: each starts its own plant. Pick-up notes:
+`handover_notes/moveit_handover_note.md`.
+
+**Next**: a baseline measurement of the MPC method under noise and model
+mismatch (`handover_notes/realism_plan.md`, step 5), then the benchmarking
+below.
 
 ## Results (to fill in after benchmarking)
 
@@ -172,6 +206,6 @@ measured results and limits: `docs/design_notes.md`; open problems:
   dynamics/constraints/horizon, to put a number on the design tradeoff
   in `docs/design_notes.md` rather than leaving it as prose
 - Success rate over N trials, across obstacle position/timing variations
-- Once a second method exists: side-by-side comparison on the same task
-  (`benchmarks/`) — packing quality, completion time, and (once a dynamic
-  obstacle scenario exists) reaction latency to a changed scene
+- MPC vs. the MoveIt method, side by side on the same task
+  (`benchmarks/`) — packing quality, completion time, and reaction latency
+  in the obstacle scenario
