@@ -11,7 +11,7 @@ step. Add to this file rather than letting things live in chat history.
 launches ended with `acados solve failed (status=4)` spam or joint speed
 oscillating at ~6.5 rad/s that never settles. A restart clears it.
 - Evidence: seen on ~15 of ~35 starts. An earlier A/B on vanilla code (see
-  `obstacle_sensing_handover_note.md`) says it is not caused by the obstacle
+  `handover_notes/obstacle_sensing_handover_note.md`) says it is not caused by the obstacle
   work; I did not measure whether sensing changes the rate.
 - Next: find why the first solve from home fails (initial guess / warm start /
   home pose against the orientation cost). A start-up retry is a workaround,
@@ -365,8 +365,10 @@ edges by up to 0.77 m from the software renders the perception is tuned on.
 
 ## I. Contacts, place-then-push, compact packing, sensed boxes (2026-09-28)
 
-What changed is in `realism_plan.md` (steps 1-3) and the implementation notes;
-what is still open or worth knowing:
+What changed is in `handover_notes/realism_plan.md` (steps 1-3) and the
+implementation notes; what is still open or worth knowing. The packing
+strategies (rows, compact, compact with a 90 deg turn) are compared in
+`figures/packing_compare.png` (`scripts/dev/packing_compare.py`).
 
 **I1. Tray walls vs wrist and forearm.** With contacts on, the wrist (link 7,
 up to 8.8 cm past the TCP) lands on the 22 cm walls when a box is set flush
@@ -377,7 +379,8 @@ setting the box down clear of the wall and pushing it back with the tool tilted
 back-row push), the lean chosen from the scan, and by the packer only choosing
 spots the robot can finish. Wrist extents are a fixed table
 (`scene.WRIST_EXTENT_TOOL`); the forearm is a rule (flange >= 9 cm from a wall
-on the robot's side), not a model.
+on the robot's side), not a model. The forearm-on-wall contact:
+`figures/issue2_forearm_wall.png`.
 
 **I2. Final gaps vary (0.2-6 mm, target 3 mm).** A box measured large is
 pushed too little, one measured small too far; the re-measure from each tray
@@ -419,7 +422,8 @@ the controller chatters on joint 7 at the torque limit every tick (offline
 replay: 99.5% of ticks; 0.8x and 0.9x are fine). The mismatch range for
 armature is therefore +-15% (a datasheet value), not the +-30% used for
 damping. A robustness target for later work (e.g. a torque-rate penalty on
-the wrist, or learning).
+the wrist, or learning). Joint 7 at 0.72x vs 0.86x:
+`figures/armature_30_vs_15.png`.
 
 **I9. Pushes are open-loop.** A push aims at where the box was planned to be
 set down, not at where it settled after release (settling moves it ~1-2 mm, so
