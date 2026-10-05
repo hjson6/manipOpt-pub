@@ -1,0 +1,38 @@
+name: manipopt
+channels:
+  - conda-forge
+  - robostack-staging
+dependencies:
+  - python=3.12        # RoboStack's ros-humble-desktop is built for 3.12
+  - numpy
+  - scipy
+  - matplotlib
+  - pinocchio          # pin.casadi: symbolic dynamics for the OCP
+  - casadi
+  - ros-humble-desktop # RoboStack: ROS 2 as conda packages, independent of the host
+                       # OS (RoboStack has no Jazzy yet)
+  - colcon-common-extensions  # not included in ros-humble-desktop
+  # MoveIt method. moveit_task_constructor is not packaged anywhere and is
+  # built from source (docs/setup.md).
+  - ros-humble-moveit                             # move_group, planning pipelines, core
+  - ros-humble-moveit-simple-controller-manager   # move_group's execution plugin
+  - ros-humble-moveit-planners-ompl
+  - ros-humble-moveit-ros-planning-interface      # PlanningSceneInterface, MoveGroupInterface (C++)
+  - ros-humble-moveit-visual-tools                # optional: RViz debug markers
+  - ros-humble-moveit-resources-panda-moveit-config  # SRDF template and meshes
+  - ros-humble-py-binding-tools  # moveit_task_constructor's Python bindings dependency
+  - ros-humble-tf2-eigen         # moveit_task_constructor dependency
+  - ros-humble-rviz2             # MTC demo/visualization
+  - ros-humble-slam-toolbox      # mobile base: the second SLAM option
+  - pip
+  - pip:
+      - pytest
+      - mujoco         # the plant: see mujoco_sim_node.py
+      - ruckig         # jerk-limited reference for task_node (as in libfranka)
+      # setuptools >= 70 dropped `setup.py develop`, which colcon's
+      # --symlink-install needs; 69.5 still has it and works on 3.12.
+      - setuptools==69.5.1
+      # acados_template comes from the acados source build (docs/setup.md)
+
+# Requires: conda config --set channel_priority strict (RoboStack's advice;
+# otherwise conda-forge and robostack-staging builds can conflict)

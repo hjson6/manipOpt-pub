@@ -1,0 +1,53 @@
+{
+ "args": {
+  "goals": [
+   "pick",
+   "place",
+   "home"
+  ],
+  "drives": 20,
+  "crowd": 0,
+  "seed": 0,
+  "map": "stations",
+  "plot": "",
+  "arm": "carry",
+  "box": true,
+  "people": "stations",
+  "no_person_margin": false,
+  "speed": 1.0,
+  "accel": 0.5,
+  "base_safety": 1.0,
+  "people_speed": 1.0,
+  "conditions": [],
+  "json": "results/ekf/baseline/quiet_s0.json"
+ },
+ "arrived": 20,
+ "drives": 20,
+ "localization": {
+  "icp": {
+   "ticks": 21665.0,
+   "pos_p50": 3.896915902267846,
+   "pos_p95": 7.1801451452165175,
+   "pos_max": 11.724222527865033,
+   "yaw_p50": 0.04016760184277132,
+   "yaw_p95": 0.1199662762669088,
+   "yaw_max": 0.2543030120337702,
+   "jump_max": 14.175233320696158,
+   "jump_p99": 6.500646867299927,
+   "jump_yaw_max": 0.22995488635337288,
+   "lost": 0,
+   "scans": 6500,
+   "dropped": 0,
+   "slip_ticks": 0,
+   "slip_tick_max": 2.0623594957203464,
+   "wet_stops": 0,
+   "ms_mean": 3.6944965985917055,
+   "ms_p95": 7.0917307864874495,
+   "fitness_p5": 0.7932960893854749,
+   "fitness_p50": 0.8221070811744386
+  }
+ },
+ "dock_lateral_max": 5.864309195856343,
+ "dock_along_max": 4.455188952077194,
+ "dock_yaw_max": 0.18450181786650713
+}

@@ -1,0 +1,17 @@
+__pycache__/
+*.pyc
+.venv/
+build/
+install/
+log/
+*_ocp.json
+*.fingerprint
+c_generated_code/
+*.so
+.vscode/
+*.egg-info/
+results/*/runs/
+results/*/batch.log
+handover_notes/
+data/
+c_generated_code_base_mpc/

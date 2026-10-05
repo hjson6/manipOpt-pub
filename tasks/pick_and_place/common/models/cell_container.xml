@@ -1,0 +1,16 @@
+<mujoco model="cell_container">
+  <!--
+    The pick-and-place cell (the two stations side by side and the ceiling
+    camera) in the arm's base frame: z = 0 is the tables' tops and the
+    arm's mount, the room floor 0.75 m below. Included by the room scene
+    inside a frame at the cell's pose in the room (scene.CELL_POSE).
+    Boxes and tray have contacts; boxes rest by gravity.
+  -->
+    <include file="station_pick.xml"/>
+    <include file="station_place.xml"/>
+
+    <!-- Overhead obstacle-sensing camera, 3.5 m above the room floor, straight down. pos and
+         fovy must match WORKSPACE_CAM_POS and WORKSPACE_CAM_FOVY_DEG in
+         scene.py (the detector's calibration, valid with the base parked at the cell). -->
+    <camera name="workspace_cam" pos="0.0 -0.20 2.75" xyaxes="1 0 0 0 1 0" fovy="70"/>
+</mujoco>

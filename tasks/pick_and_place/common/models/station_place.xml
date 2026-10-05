@@ -1,0 +1,28 @@
+<mujoco model="station_place">
+  <!--
+    The place station: the tray's table and the tray, in the arm's base frame of
+    the old fixed cell. Included by cell_container*.xml (the cell) or placed on its
+    own in the room (the stations layout).
+  -->
+    <!-- The tray's table, its top at the arm's mount height. Must match
+         PLACE_TABLE_BOUNDS in scene.py. -->
+    <geom name="place_table_top" type="box" pos="-0.300 -0.475 -0.015" size="0.350 0.225 0.015" rgba="0.72 0.62 0.48 1"/>
+    <geom name="place_table_leg0" type="cylinder" fromto="-0.610 -0.660 -0.750 -0.610 -0.660 -0.030" size="0.025" rgba="0.35 0.35 0.38 1"/>
+    <geom name="place_table_leg1" type="cylinder" fromto="0.010 -0.660 -0.750 0.010 -0.660 -0.030" size="0.025" rgba="0.35 0.35 0.38 1"/>
+    <geom name="place_table_leg2" type="cylinder" fromto="-0.610 -0.290 -0.750 -0.610 -0.290 -0.030" size="0.025" rgba="0.35 0.35 0.38 1"/>
+    <geom name="place_table_leg3" type="cylinder" fromto="0.010 -0.290 -0.750 0.010 -0.290 -0.030" size="0.025" rgba="0.35 0.35 0.38 1"/>
+
+    <!-- Destination tray (floor and 4 walls): for obstacle
+         avoidance, display and contact. Must match DEST_TRAY_* in scene.py; MJCF has
+         no expressions, so the numbers are literal. -->
+    <geom name="dest_tray_floor" type="box" pos="-0.3000 -0.4250 -0.0050" size="0.2250 0.1500 0.0050"
+      rgba="0.5 0.5 0.5 1"/>
+    <geom name="dest_tray_wall_west" type="box" pos="-0.5200 -0.4250 0.1100" size="0.0050 0.1500 0.1100"
+      rgba="0.5 0.5 0.5 1"/>
+    <geom name="dest_tray_wall_east" type="box" pos="-0.0800 -0.4250 0.1100" size="0.0050 0.1500 0.1100"
+      rgba="0.5 0.5 0.5 1"/>
+    <geom name="dest_tray_wall_south" type="box" pos="-0.3000 -0.5700 0.1100" size="0.2250 0.0050 0.1100"
+      rgba="0.5 0.5 0.5 1"/>
+    <geom name="dest_tray_wall_north" type="box" pos="-0.3000 -0.2800 0.1100" size="0.2250 0.0050 0.1100"
+      rgba="0.5 0.5 0.5 1"/>
+</mujoco>
