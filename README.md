@@ -1,6 +1,6 @@
 # manipOpt
 
-https://github.com/user-attachments/assets/5d20ed4a-0f24-43bf-97c5-697f5f58c288
+https://github.com/user-attachments/assets/d2ba8834-6986-48ad-a623-cafe7893ffd3
 
 A mobile manipulator in simulation: a Franka Panda arm on a differential-drive mobile
 base that does a whole pick-and-pack job on its own, in a 7.0 x 5.6 m room with people
