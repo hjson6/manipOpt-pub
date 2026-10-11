@@ -1,0 +1,242 @@
+<mujoco model="room_scene">
+  <!--
+    The room (the world frame: origin at the south-west corner, floor z = 0,
+    7.0 x 5.6 m, walls 2 m high, a pillar and a shelf), the pick-and-place cell
+    inside it, and the mobile manipulator: a differential-drive chassis
+    (base_link) on a free joint, rolling on its two driven wheels and four
+    ball casters. The arm (panda_robot.xml) is attached at the arm_mount site
+    by load_scene_model. Must match the room, base and cell constants in
+    scene.py.
+  -->
+  <compiler angle="degree" autolimits="true"/>
+  <option integrator="implicitfast" impratio="10" timestep="0.002"/>
+  <!-- The old cell's extent: the same depth range for the cameras. -->
+  <statistic center="3.0 2.8 0.0" extent="4.29"/>
+
+  <visual>
+    <headlight diffuse="0.6 0.6 0.6" ambient="0.3 0.3 0.3" specular="0 0 0"/>
+    <rgba haze="0.15 0.25 0.35 1"/>
+    <global azimuth="300" elevation="-20"/>
+  </visual>
+
+  <asset>
+    <texture type="skybox" builtin="gradient" rgb1="0.3 0.5 0.7" rgb2="0 0 0" width="512" height="3072"/>
+    <texture type="2d" name="groundplane" builtin="checker" mark="edge" rgb1="0.2 0.3 0.4" rgb2="0.1 0.2 0.3"
+      markrgb="0.8 0.8 0.8" width="300" height="300"/>
+    <material name="groundplane" texture="groundplane" texuniform="true" texrepeat="5 5" reflectance="0.2"/>
+  </asset>
+
+  <default>
+    <default class="box">
+      <geom condim="4" friction="0.6 0.01 0.001"/>
+    </default>
+    <default class="wall">
+      <geom type="box" rgba="0.80 0.80 0.76 1"/>
+    </default>
+    <default class="shelf">
+      <geom type="box" rgba="0.55 0.42 0.30 1"/>
+    </default>
+  </default>
+
+  <worldbody>
+    <!-- Room: walls 0.10 m thick outside the 7.0 x 5.6 m floor, a pillar and a shelf
+         (features for SLAM, obstacles for the planner). The frame is the world (offline
+         tools may re-express the scene in the arm's frame: load_scene_model). -->
+    <frame name="room">
+    <light pos="3.5 2.8 4" dir="0 0 -1" directional="true"/>
+    <geom name="floor" pos="3.5 2.8 0" size="3.5 2.8 0.05" type="plane" material="groundplane"/>
+    <geom name="wall_south" class="wall" pos="3.5 -0.05 1.0" size="3.6 0.05 1.0"/>
+    <geom name="wall_north" class="wall" pos="3.5 5.65 1.0" size="3.6 0.05 1.0"/>
+    <geom name="wall_west" class="wall" pos="-0.05 2.8 1.0" size="0.05 2.8 1.0"/>
+    <geom name="wall_east" class="wall" pos="7.05 2.8 1.0" size="0.05 2.8 1.0"/>
+    <geom name="pillar" class="wall" pos="0.8 4.8 1.0" size="0.20 0.20 1.0"/>
+    <geom name="shelf_back" class="shelf" pos="4.0 5.59 0.9" size="1.0 0.01 0.9"/>
+    <geom name="shelf_side_w" class="shelf" pos="3.01 5.4 0.9" size="0.01 0.20 0.9"/>
+    <geom name="shelf_side_e" class="shelf" pos="4.99 5.4 0.9" size="0.01 0.20 0.9"/>
+    <geom name="shelf_board0" class="shelf" pos="4.0 5.4 0.05" size="0.98 0.20 0.05"/>
+    <geom name="shelf_board1" class="shelf" pos="4.0 5.4 0.60" size="0.98 0.20 0.01"/>
+    <geom name="shelf_board2" class="shelf" pos="4.0 5.4 1.20" size="0.98 0.20 0.01"/>
+    <geom name="shelf_board3" class="shelf" pos="4.0 5.4 1.79" size="0.98 0.20 0.01"/>
+    </frame>
+
+    <!-- The cell at scene.CELL_POSE (x, y, yaw); z = the arm's mount height. -->
+    <frame name="cell" pos="3.0 2.8 0.75" euler="0 0 90">
+      <include file="cell_container.xml"/>
+    </frame>
+
+    <!-- Mobile base, MiR-like: base_link on the floor midway between the drive
+         wheels, x forward. The drive wheels are sprung (about 400 N preload each, for
+         traction) with a rounded tread (one contact point, no scrub when turning);
+         the casters carry the rest. Chassis 0.80 x 0.56 x 0.30 m, a pedestal up to the arm's
+         0.75 m mount, 0.20 m ahead of the wheel axle and turned 90 deg. Parked at the
+         cell (scene.BASE_PARK_POSE). Must match the CHASSIS_*, WHEEL_*, ARM_MOUNT_*
+         and LIDAR_* constants in scene.py. -->
+    <body name="base_link" pos="2.8 2.80 0" euler="0 0 0">
+      <freejoint name="base_free"/>
+      <inertial pos="0.03 0 0.22" mass="110" diaginertia="3.7 6.7 8.7"/>
+      <geom name="chassis" type="box" pos="0 0 0.19" size="0.40 0.28 0.15" rgba="0.30 0.32 0.36 1"/>
+      <geom name="pedestal" type="box" pos="0.20 0 0.545" size="0.15 0.15 0.205" rgba="0.55 0.57 0.60 1"/>
+      <site name="arm_mount" pos="0.20 0 0.75" euler="0 0 90"/>
+      <!-- Safety lidars with their optical centres on the front-left and rear-right
+           corners (each sector runs along both faces), 0.20 m above the floor; x = the
+           centre of the 270 deg sector. -->
+      <site name="lidar_0" type="cylinder" pos="0.40 0.28 0.20" euler="0 0 45" size="0.04 0.04" rgba="0.95 0.80 0.10 1"/>
+      <site name="lidar_1" type="cylinder" pos="-0.40 -0.28 0.20" euler="0 0 -135" size="0.04 0.04" rgba="0.95 0.80 0.10 1"/>
+      <site name="imu" pos="0 0 0.20"/>
+      <body name="wheel_left_mount" pos="0 0.25 0.10">
+        <joint name="wheel_left_suspension" type="slide" axis="0 0 1" range="-0.02 0.02" stiffness="40000"
+          springref="-0.01" damping="300"/>
+        <inertial pos="0 0 0" mass="1.0" diaginertia="0.002 0.002 0.002"/>
+        <body name="wheel_left">
+          <joint name="wheel_left" type="hinge" axis="0 1 0" damping="0.05" armature="0.1"/>
+          <inertial pos="0 0 0" mass="2.0" diaginertia="0.0054 0.01 0.0054"/>
+          <geom name="wheel_left" type="ellipsoid" size="0.10 0.025 0.10"
+            friction="1.0 0.005 0.0001" rgba="0.10 0.10 0.10 1"/>
+        </body>
+      </body>
+      <body name="wheel_right_mount" pos="0 -0.25 0.10">
+        <joint name="wheel_right_suspension" type="slide" axis="0 0 1" range="-0.02 0.02" stiffness="40000"
+          springref="-0.01" damping="300"/>
+        <inertial pos="0 0 0" mass="1.0" diaginertia="0.002 0.002 0.002"/>
+        <body name="wheel_right">
+          <joint name="wheel_right" type="hinge" axis="0 1 0" damping="0.05" armature="0.1"/>
+          <inertial pos="0 0 0" mass="2.0" diaginertia="0.0054 0.01 0.0054"/>
+          <geom name="wheel_right" type="ellipsoid" size="0.10 0.025 0.10"
+            friction="1.0 0.005 0.0001" rgba="0.10 0.10 0.10 1"/>
+        </body>
+      </body>
+      <body name="caster_fl" pos="0.32 0.20 0.04">
+        <joint type="ball" damping="0.002"/>
+        <geom type="sphere" size="0.04" mass="0.3" friction="0.6 0.005 0.0001" rgba="0.15 0.15 0.15 1"/>
+      </body>
+      <body name="caster_fr" pos="0.32 -0.20 0.04">
+        <joint type="ball" damping="0.002"/>
+        <geom type="sphere" size="0.04" mass="0.3" friction="0.6 0.005 0.0001" rgba="0.15 0.15 0.15 1"/>
+      </body>
+      <body name="caster_rl" pos="-0.32 0.20 0.04">
+        <joint type="ball" damping="0.002"/>
+        <geom type="sphere" size="0.04" mass="0.3" friction="0.6 0.005 0.0001" rgba="0.15 0.15 0.15 1"/>
+      </body>
+      <body name="caster_rr" pos="-0.32 -0.20 0.04">
+        <joint type="ball" damping="0.002"/>
+        <geom type="sphere" size="0.04" mass="0.3" friction="0.6 0.005 0.0001" rgba="0.15 0.15 0.15 1"/>
+      </body>
+    </body>
+
+    <!-- Sphere obstacle (the "static" carton scenario), a mocap body moved by
+         mujoco_sim_node from /env/dynamic_obstacle and resized to the
+         radius in each message. Parked below the floor when absent. Opaque:
+         a translucent geom does not reliably write depth. The controller
+         only sees it through its sensors. -->
+    <body name="dynamic_obstacle" mocap="true" pos="0.9 0.9 -3.0">
+      <geom type="sphere" size="0.10" rgba="0.9 0.15 0.1 1" contype="0" conaffinity="0"/>
+    </body>
+    <!-- Person for the "visit" and "walk" modes, full size (1.75 m, legs 6 cm
+         radius, 0.6 m across the arms), standing on the room floor. Mocap, parked
+         below the floor when absent; its +x is the way the person faces. Seen by
+         the robot only through its sensors. Keep in sync with
+         dynamic_obstacle_node.PERSON_*. -->
+    <body name="person_obstacle" mocap="true" pos="0.9 0.9 -3.0">
+      <geom name="person_leg_l" type="capsule" fromto="0 0.10 0.06 0 0.10 0.88" size="0.06" rgba="0.20 0.25 0.40 1" contype="0" conaffinity="0"/>
+      <geom name="person_leg_r" type="capsule" fromto="0 -0.10 0.06 0 -0.10 0.88" size="0.06" rgba="0.20 0.25 0.40 1" contype="0" conaffinity="0"/>
+      <geom name="person_torso" type="box" pos="0 0 1.20" size="0.12 0.20 0.30" rgba="0.85 0.45 0.15 1" contype="0" conaffinity="0"/>
+      <geom name="person_arm_l" type="capsule" fromto="0 0.25 0.85 0 0.25 1.45" size="0.045" rgba="0.85 0.45 0.15 1" contype="0" conaffinity="0"/>
+      <geom name="person_arm_r" type="capsule" fromto="0 -0.25 0.85 0 -0.25 1.45" size="0.045" rgba="0.85 0.45 0.15 1" contype="0" conaffinity="0"/>
+      <geom name="person_head" type="sphere" pos="0 0 1.65" size="0.10" rgba="0.90 0.75 0.60 1" contype="0" conaffinity="0"/>
+    </body>
+    <!-- More people for the mobile scenarios (person_1..6), the same size; parked
+         below the floor until a scenario moves them. -->
+    <body name="person_1" mocap="true" pos="1.2 0.9 -3.0">
+      <geom type="capsule" fromto="0 0.10 0.06 0 0.10 0.88" size="0.06" rgba="0.20 0.25 0.40 1" contype="0" conaffinity="0"/>
+      <geom type="capsule" fromto="0 -0.10 0.06 0 -0.10 0.88" size="0.06" rgba="0.20 0.25 0.40 1" contype="0" conaffinity="0"/>
+      <geom type="box" pos="0 0 1.20" size="0.12 0.20 0.30" rgba="0.15 0.45 0.25 1" contype="0" conaffinity="0"/>
+      <geom type="capsule" fromto="0 0.25 0.85 0 0.25 1.45" size="0.045" rgba="0.15 0.45 0.25 1" contype="0" conaffinity="0"/>
+      <geom type="capsule" fromto="0 -0.25 0.85 0 -0.25 1.45" size="0.045" rgba="0.15 0.45 0.25 1" contype="0" conaffinity="0"/>
+      <geom type="sphere" pos="0 0 1.65" size="0.10" rgba="0.90 0.75 0.60 1" contype="0" conaffinity="0"/>
+    </body>
+    <body name="person_2" mocap="true" pos="1.5 0.9 -3.0">
+      <geom type="capsule" fromto="0 0.10 0.06 0 0.10 0.88" size="0.06" rgba="0.20 0.25 0.40 1" contype="0" conaffinity="0"/>
+      <geom type="capsule" fromto="0 -0.10 0.06 0 -0.10 0.88" size="0.06" rgba="0.20 0.25 0.40 1" contype="0" conaffinity="0"/>
+      <geom type="box" pos="0 0 1.20" size="0.12 0.20 0.30" rgba="0.45 0.20 0.45 1" contype="0" conaffinity="0"/>
+      <geom type="capsule" fromto="0 0.25 0.85 0 0.25 1.45" size="0.045" rgba="0.45 0.20 0.45 1" contype="0" conaffinity="0"/>
+      <geom type="capsule" fromto="0 -0.25 0.85 0 -0.25 1.45" size="0.045" rgba="0.45 0.20 0.45 1" contype="0" conaffinity="0"/>
+      <geom type="sphere" pos="0 0 1.65" size="0.10" rgba="0.90 0.75 0.60 1" contype="0" conaffinity="0"/>
+    </body>
+    <body name="person_3" mocap="true" pos="1.8 0.9 -3.0">
+      <geom type="capsule" fromto="0 0.10 0.06 0 0.10 0.88" size="0.06" rgba="0.20 0.25 0.40 1" contype="0" conaffinity="0"/>
+      <geom type="capsule" fromto="0 -0.10 0.06 0 -0.10 0.88" size="0.06" rgba="0.20 0.25 0.40 1" contype="0" conaffinity="0"/>
+      <geom type="box" pos="0 0 1.20" size="0.12 0.20 0.30" rgba="0.20 0.40 0.55 1" contype="0" conaffinity="0"/>
+      <geom type="capsule" fromto="0 0.25 0.85 0 0.25 1.45" size="0.045" rgba="0.20 0.40 0.55 1" contype="0" conaffinity="0"/>
+      <geom type="capsule" fromto="0 -0.25 0.85 0 -0.25 1.45" size="0.045" rgba="0.20 0.40 0.55 1" contype="0" conaffinity="0"/>
+      <geom type="sphere" pos="0 0 1.65" size="0.10" rgba="0.90 0.75 0.60 1" contype="0" conaffinity="0"/>
+    </body>
+    <body name="person_4" mocap="true" pos="2.1 0.9 -3.0">
+      <geom type="capsule" fromto="0 0.10 0.06 0 0.10 0.88" size="0.06" rgba="0.20 0.25 0.40 1" contype="0" conaffinity="0"/>
+      <geom type="capsule" fromto="0 -0.10 0.06 0 -0.10 0.88" size="0.06" rgba="0.20 0.25 0.40 1" contype="0" conaffinity="0"/>
+      <geom type="box" pos="0 0 1.20" size="0.12 0.20 0.30" rgba="0.55 0.35 0.15 1" contype="0" conaffinity="0"/>
+      <geom type="capsule" fromto="0 0.25 0.85 0 0.25 1.45" size="0.045" rgba="0.55 0.35 0.15 1" contype="0" conaffinity="0"/>
+      <geom type="capsule" fromto="0 -0.25 0.85 0 -0.25 1.45" size="0.045" rgba="0.55 0.35 0.15 1" contype="0" conaffinity="0"/>
+      <geom type="sphere" pos="0 0 1.65" size="0.10" rgba="0.90 0.75 0.60 1" contype="0" conaffinity="0"/>
+    </body>
+    <body name="person_5" mocap="true" pos="2.4 0.9 -3.0">
+      <geom type="capsule" fromto="0 0.10 0.06 0 0.10 0.88" size="0.06" rgba="0.20 0.25 0.40 1" contype="0" conaffinity="0"/>
+      <geom type="capsule" fromto="0 -0.10 0.06 0 -0.10 0.88" size="0.06" rgba="0.20 0.25 0.40 1" contype="0" conaffinity="0"/>
+      <geom type="box" pos="0 0 1.20" size="0.12 0.20 0.30" rgba="0.25 0.50 0.50 1" contype="0" conaffinity="0"/>
+      <geom type="capsule" fromto="0 0.25 0.85 0 0.25 1.45" size="0.045" rgba="0.25 0.50 0.50 1" contype="0" conaffinity="0"/>
+      <geom type="capsule" fromto="0 -0.25 0.85 0 -0.25 1.45" size="0.045" rgba="0.25 0.50 0.50 1" contype="0" conaffinity="0"/>
+      <geom type="sphere" pos="0 0 1.65" size="0.10" rgba="0.90 0.75 0.60 1" contype="0" conaffinity="0"/>
+    </body>
+    <body name="person_6" mocap="true" pos="2.7 0.9 -3.0">
+      <geom type="capsule" fromto="0 0.10 0.06 0 0.10 0.88" size="0.06" rgba="0.20 0.25 0.40 1" contype="0" conaffinity="0"/>
+      <geom type="capsule" fromto="0 -0.10 0.06 0 -0.10 0.88" size="0.06" rgba="0.20 0.25 0.40 1" contype="0" conaffinity="0"/>
+      <geom type="box" pos="0 0 1.20" size="0.12 0.20 0.30" rgba="0.60 0.25 0.25 1" contype="0" conaffinity="0"/>
+      <geom type="capsule" fromto="0 0.25 0.85 0 0.25 1.45" size="0.045" rgba="0.60 0.25 0.25 1" contype="0" conaffinity="0"/>
+      <geom type="capsule" fromto="0 -0.25 0.85 0 -0.25 1.45" size="0.045" rgba="0.60 0.25 0.25 1" contype="0" conaffinity="0"/>
+      <geom type="sphere" pos="0 0 1.65" size="0.10" rgba="0.90 0.75 0.60 1" contype="0" conaffinity="0"/>
+    </body>
+  </worldbody>
+
+  <contact>
+    <!-- The wheels sit in the chassis, one body (the suspension) apart. -->
+    <exclude body1="base_link" body2="wheel_left"/>
+    <exclude body1="base_link" body2="wheel_right"/>
+    <!-- Wheel on floor as explicit pairs with a near-hard impedance: MuJoCo's default soft
+         friction lets a parked wheel creep sideways under a steady load (about 1 mm per 5 s
+         at 30 N, and a few degrees of yaw during a push into the tray). -->
+    <exclude body1="world" body2="wheel_left"/>
+    <exclude body1="world" body2="wheel_right"/>
+    <pair geom1="floor" geom2="wheel_left" condim="3" friction="1 1 0.005 0.0001 0.0001" solref="0.005 1"
+      solimp="0.999 0.9999 0.001"/>
+    <pair geom1="floor" geom2="wheel_right" condim="3" friction="1 1 0.005 0.0001 0.0001" solref="0.005 1"
+      solimp="0.999 0.9999 0.001"/>
+  </contact>
+
+  <actuator>
+    <!-- Wheel drives: torque at the wheel (geared motors, the rotor inertia as the joint's
+         armature); the motor controller's speed loop runs in the plant every substep
+         (base_drive.py). A velocity actuator would be integrated implicitly, which lets
+         the chassis outrun its wheels. -->
+    <motor name="wheel_left_motor" joint="wheel_left" ctrlrange="-30 30"/>
+    <motor name="wheel_right_motor" joint="wheel_right" ctrlrange="-30 30"/>
+  </actuator>
+
+  <equality>
+    <!-- Shared by all boxes: mujoco_sim_node sets body2 and relpose at each
+         pick. -->
+    <weld name="box_carry" body1="attachment" body2="cbox_0" active="false"/>
+    <!-- Static friction of a braked wheel: its contact point pinned to the floor while
+         the drive holds at standstill, released on break-away or when it moves
+         (base_drive.py; anchors set when engaged). -->
+    <connect name="wheel_left_stick" body1="wheel_left" anchor="0 0 -0.10" active="false"/>
+    <connect name="wheel_right_stick" body1="wheel_right" anchor="0 0 -0.10" active="false"/>
+  </equality>
+
+  <sensor>
+    <!-- Wrist force/torque sensor (a flange load cell). -->
+    <force name="wrist_force" site="attachment_site"/>
+    <torque name="wrist_torque" site="attachment_site"/>
+    <!-- The base's IMU. -->
+    <gyro name="imu_gyro" site="imu"/>
+    <accelerometer name="imu_accel" site="imu"/>
+  </sensor>
+</mujoco>

@@ -1,0 +1,55 @@
+{
+ "args": {
+  "goals": [
+   "pick",
+   "place",
+   "home"
+  ],
+  "drives": 20,
+  "crowd": 4,
+  "seed": 0,
+  "map": "stations",
+  "plot": "",
+  "arm": "carry",
+  "box": true,
+  "people": "job",
+  "no_person_margin": false,
+  "speed": 1.0,
+  "accel": 0.5,
+  "base_safety": 1.0,
+  "people_speed": 1.0,
+  "conditions": [
+   "dropout"
+  ],
+  "json": "results/ekf/baseline/dropout_crowd_s0.json"
+ },
+ "arrived": 20,
+ "drives": 20,
+ "localization": {
+  "icp": {
+   "ticks": 35030.0,
+   "pos_p50": 3.46905852557334,
+   "pos_p95": 6.733839181784821,
+   "pos_max": 11.747814025908864,
+   "yaw_p50": 0.03814308970876177,
+   "yaw_p95": 0.11182354001558124,
+   "yaw_max": 0.21734975585773875,
+   "jump_max": 11.30467523087822,
+   "jump_p99": 6.338416794574271,
+   "jump_yaw_max": 0.216884838052934,
+   "lost": 0,
+   "scans": 9463,
+   "dropped": 1046,
+   "slip_ticks": 0,
+   "slip_tick_max": 1.4607992461054178,
+   "wet_stops": 0,
+   "ms_mean": 3.4183678565044993,
+   "ms_p95": 6.710700600524432,
+   "fitness_p5": 0.7445255474452555,
+   "fitness_p50": 0.7757774140752864
+  }
+ },
+ "dock_lateral_max": 5.581968687366157,
+ "dock_along_max": 3.927963699906112,
+ "dock_yaw_max": 0.30820718505954653
+}

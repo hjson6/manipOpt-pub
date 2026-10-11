@@ -1,0 +1,13 @@
+# Put down the box currently held (from the last successful Pick) and
+# retreat straight up. Rejected if nothing is held.
+
+# Goal
+geometry_msgs/Point surface_point   # where the held box's bottom face rests (a
+                                    # sensed surface); the executor adds the box height
+---
+# Result
+bool success
+string failure_reason
+---
+# Feedback
+string stage

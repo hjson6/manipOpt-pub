@@ -1,0 +1,12 @@
+# Move the TCP to a point with the tool pointing straight down: the scan
+# vantage points (PARK_POSITION, DEST_SCAN_POSITION in scene.py).
+
+# Goal
+geometry_msgs/Point tcp_position
+---
+# Result
+bool success
+string failure_reason
+---
+# Feedback
+string stage

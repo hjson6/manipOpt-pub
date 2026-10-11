@@ -1,0 +1,68 @@
+<mujoco model="station_pick_tall">
+  <!--
+    The pick station: the pile's table and the pile, in the arm's base frame of the
+    old fixed cell (z = 0 the table top and the arm's mount, the room floor 0.75 m
+    below). Included by cell_container_tall.xml (the cell) or placed on its own
+    in the room (the stations layout).
+  -->
+    <!-- The pile's table, its top at the arm's mount height. Must match
+         PICK_TABLE_BOUNDS in scene.py. -->
+    <geom name="pick_table_top" type="box" pos="0.520 0.250 -0.015" size="0.220 0.300 0.015" rgba="0.72 0.62 0.48 1"/>
+    <geom name="pick_table_leg0" type="cylinder" fromto="0.340 -0.010 -0.750 0.340 -0.010 -0.030" size="0.025" rgba="0.35 0.35 0.38 1"/>
+    <geom name="pick_table_leg1" type="cylinder" fromto="0.700 -0.010 -0.750 0.700 -0.010 -0.030" size="0.025" rgba="0.35 0.35 0.38 1"/>
+    <geom name="pick_table_leg2" type="cylinder" fromto="0.340 0.510 -0.750 0.340 0.510 -0.030" size="0.025" rgba="0.35 0.35 0.38 1"/>
+    <geom name="pick_table_leg3" type="cylinder" fromto="0.700 0.510 -0.750 0.700 0.510 -0.030" size="0.025" rgba="0.35 0.35 0.38 1"/>
+
+    <!-- Starting pile: 8 boxes of mixed sizes (half-extents 0.030 x 0.030 x
+         0.0375 up to 0.075 x 0.060 x 0.045 m), from an offline packing script
+         (not in the repo). 0, 1, 2 and 4 stand on the pick table; 3, 5, 6 and 7 on
+         other boxes.
+         diaginertia is the solid-box formula for each box's size. The
+         pile must fit the pick zone and box spec in scene.py (nothing there
+         is read from these poses). -->
+    <body name="cbox_0" pos="0.3937 0.3187 0.0450">
+      <freejoint/>
+      <inertial mass="0.2" pos="0 0 0" diaginertia="3.75e-04 5.10e-04 6.15e-04"/>
+      <geom type="box" size="0.0750 0.0600 0.0450" rgba="0.65 0.45 0.10 1" class="box"/>
+    </body>
+    <body name="cbox_1" pos="0.3863 0.1837 0.0525">
+      <freejoint/>
+      <inertial mass="0.2" pos="0 0 0" diaginertia="4.88e-04 4.88e-04 6.08e-04"/>
+      <geom type="box" size="0.0675 0.0675 0.0525" rgba="0.85 0.65 0.20 1" class="box"/>
+    </body>
+    <body name="cbox_2" pos="0.5137 0.1987 0.0600">
+      <freejoint/>
+      <inertial mass="0.2" pos="0 0 0" diaginertia="4.24e-04 4.24e-04 3.68e-04"/>
+      <geom type="box" size="0.0525 0.0525 0.0600" rgba="0.65 0.45 0.10 1" class="box"/>
+    </body>
+    <body name="cbox_3" pos="0.3863 0.3037 0.1275">
+      <freejoint/>
+      <inertial mass="0.2" pos="0 0 0" diaginertia="2.29e-04 3.34e-04 3.75e-04"/>
+      <geom type="box" size="0.0600 0.0450 0.0375" rgba="0.85 0.65 0.20 1" class="box"/>
+    </body>
+    <body name="cbox_7" pos="0.4912 0.1837 0.1575">
+      <freejoint/>
+      <inertial mass="0.2" pos="0 0 0" diaginertia="1.54e-04 1.54e-04 1.20e-04"/>
+      <geom type="box" size="0.0300 0.0300 0.0375" rgba="0.85 0.65 0.20 1" class="box"/>
+    </body>
+
+    <!-- Tall variant (sensed_cell_plan fix 3): cbox_4, 5 and 6 left out so
+         eight boxes still fit the tray; cbox_8 (120 mm high) on cbox_3, and a
+         tower of cbox_9 and cbox_10 on cbox_7, top 0.35 m, in the carry path
+         of a box lifted from the far side. -->
+    <body name="cbox_8" pos="0.3863 0.3037 0.2250">
+      <freejoint/>
+      <inertial mass="0.2" pos="0 0 0" diaginertia="4.07e-04 5.22e-04 4.48e-04"/>
+      <geom type="box" size="0.0650 0.0500 0.0600" rgba="0.65 0.45 0.10 1" class="box"/>
+    </body>
+    <body name="cbox_9" pos="0.4912 0.1837 0.2350">
+      <freejoint/>
+      <inertial mass="0.2" pos="0 0 0" diaginertia="1.67e-04 1.67e-04 1.20e-04"/>
+      <geom type="box" size="0.0300 0.0300 0.0400" rgba="0.65 0.45 0.10 1" class="box"/>
+    </body>
+    <body name="cbox_10" pos="0.4912 0.1837 0.3125">
+      <freejoint/>
+      <inertial mass="0.2" pos="0 0 0" diaginertia="1.54e-04 1.54e-04 1.20e-04"/>
+      <geom type="box" size="0.0300 0.0300 0.0375" rgba="0.85 0.65 0.20 1" class="box"/>
+    </body>
+</mujoco>

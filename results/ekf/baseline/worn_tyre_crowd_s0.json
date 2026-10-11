@@ -1,0 +1,55 @@
+{
+ "args": {
+  "goals": [
+   "pick",
+   "place",
+   "home"
+  ],
+  "drives": 20,
+  "crowd": 4,
+  "seed": 0,
+  "map": "stations",
+  "plot": "",
+  "arm": "carry",
+  "box": true,
+  "people": "job",
+  "no_person_margin": false,
+  "speed": 1.0,
+  "accel": 0.5,
+  "base_safety": 1.0,
+  "people_speed": 1.0,
+  "conditions": [
+   "worn_tyre"
+  ],
+  "json": "results/ekf/baseline/worn_tyre_crowd_s0.json"
+ },
+ "arrived": 20,
+ "drives": 20,
+ "localization": {
+  "icp": {
+   "ticks": 38505.0,
+   "pos_p50": 3.2284628741883283,
+   "pos_p95": 6.413232893137388,
+   "pos_max": 14.939600541964698,
+   "yaw_p50": 0.039648171679146076,
+   "yaw_p95": 0.10889934108235416,
+   "yaw_max": 0.25017482686250053,
+   "jump_max": 11.45277276959686,
+   "jump_p99": 6.073563314103722,
+   "jump_yaw_max": 0.2420684766015333,
+   "lost": 0,
+   "scans": 11552,
+   "dropped": 0,
+   "slip_ticks": 0,
+   "slip_tick_max": 1.8582425836246221,
+   "wet_stops": 0,
+   "ms_mean": 3.2473171327422423,
+   "ms_p95": 6.221808056579891,
+   "fitness_p5": 0.7443840478060824,
+   "fitness_p50": 0.7759171832939065
+  }
+ },
+ "dock_lateral_max": 19.923033017601455,
+ "dock_along_max": 3.8655669122769085,
+ "dock_yaw_max": 0.5519469823410061
+}

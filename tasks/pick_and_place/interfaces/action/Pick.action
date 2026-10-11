@@ -1,0 +1,15 @@
+# Grasp one box and lift it (decision_node -> mtc_executor_node).
+# Pick and Place are separate because the place decision needs the grasped
+# box's size, known only after the grasp; the tray is scanned in between.
+
+# Goal
+geometry_msgs/Point top_surface_point   # sensed top-surface center of the box
+geometry_msgs/Vector3 footprint_size    # sensed full x/y extents; z unused
+---
+# Result
+bool success
+string failure_reason
+geometry_msgs/Vector3 grasped_box_size  # HALF-extents, relayed from /sim/grasped_box_size
+---
+# Feedback
+string stage

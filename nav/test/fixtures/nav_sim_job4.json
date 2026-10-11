@@ -1,0 +1,324 @@
+{
+ "args": {
+  "accel": 0.5,
+  "arm": "carry",
+  "base_safety": 1.0,
+  "box": true,
+  "conditions": [],
+  "crowd": 4,
+  "drives": 4,
+  "fusion": "ekf",
+  "goals": [
+   "pick",
+   "place"
+  ],
+  "map": "stations",
+  "no_person_margin": false,
+  "people": "job",
+  "people_speed": 1.0,
+  "scan_latency": 0.02,
+  "seed": 0,
+  "speed": 1.0,
+  "stop_safety": null,
+  "teach": false
+ },
+ "arrived": 4,
+ "drive_scores": [
+  {
+   "body_any": [
+    0.35335237946227577,
+    "link5 / person_1"
+   ],
+   "body_closing": [
+    0.3620873903663568,
+    "link0 / person_1"
+   ],
+   "closest": [
+    6.4,
+    0.2,
+    -0.83,
+    1.2,
+    [
+     -0.06,
+     -0.67
+    ],
+    "clear",
+    "route"
+   ],
+   "contacts": 0,
+   "detour": 1.0825952221957065,
+   "dist": 3.0571337444806295,
+   "err": [
+    0.0014748923429820358,
+    0.010958628785660673,
+    -0.4120157496427471
+   ],
+   "events": {
+    "aligns": 0,
+    "rejoins": 0,
+    "replans": 0,
+    "step_backs": 0
+   },
+   "extra_turn_deg": 159.86293995697216,
+   "goal": "pick",
+   "intrusions": 0,
+   "min_clear": 0.3318077251138772,
+   "min_clear_any": 0.3318077251138772,
+   "oscillations": 0,
+   "planned": [
+    2.8238936232142127,
+    1.5670940142016252
+   ],
+   "realigns": 0,
+   "retries": 0,
+   "reversals": 2,
+   "state": "docked",
+   "stop_onsets": 0,
+   "stop_onsets_by": {},
+   "stop_s": 0.0,
+   "stops": 0,
+   "t": 16.6,
+   "t0": 0.0,
+   "turn_backs": 0,
+   "turned": 4.3572286683687915,
+   "turned_by": {
+    "approach": 0.10173876386501624,
+    "docked": 4.893465854749479e-06,
+    "route/far": 1.1829370389934586,
+    "route/standing": 2.0815775588293675,
+    "route/walking": 0.9909704132151029
+   },
+   "warn_s": 0.0,
+   "warn_s_by": {},
+   "warns": 0,
+   "wiggle_deg": 0.0,
+   "wiggles": 0
+  },
+  {
+   "body_any": [
+    0.2699836022145703,
+    "link6 / person_2"
+   ],
+   "body_closing": [
+    0.5614055627874696,
+    "link0 / person_2"
+   ],
+   "closest": [
+    6.9,
+    -0.05,
+    -0.99,
+    1.0,
+    [
+     0.84,
+     -0.57
+    ],
+    "warn",
+    "route"
+   ],
+   "contacts": 0,
+   "detour": 1.021750524822504,
+   "dist": 6.100112007481586,
+   "err": [
+    0.0023607189286405372,
+    0.0008999948740564534,
+    0.08714578261006142
+   ],
+   "events": {
+    "aligns": 0,
+    "rejoins": 0,
+    "replans": 0,
+    "step_backs": 0
+   },
+   "extra_turn_deg": 82.3200064185129,
+   "goal": "place",
+   "intrusions": 0,
+   "min_clear": 0.4637403841696514,
+   "min_clear_any": 0.16840489639797557,
+   "oscillations": 0,
+   "planned": [
+    5.970255810283319,
+    3.1283928892836705
+   ],
+   "realigns": 0,
+   "retries": 0,
+   "reversals": 2,
+   "state": "docked",
+   "stop_onsets": 0,
+   "stop_onsets_by": {},
+   "stop_s": 0.0,
+   "stops": 0,
+   "t": 26.200000000000003,
+   "t0": 16.6,
+   "turn_backs": 0,
+   "turned": 4.565148041549586,
+   "turned_by": {
+    "approach": 0.06624459675377414,
+    "docked": 9.88872867964119e-05,
+    "route/far": 0.09572118279003261,
+    "route/standing": 3.1962718107512433,
+    "route/walking": 1.1942411310210588,
+    "undock": 0.012570432946682253
+   },
+   "warn_s": 0.7999999999999999,
+   "warn_s_by": {
+    "route": 0.7999999999999999
+   },
+   "warns": 8,
+   "wiggle_deg": 0.0,
+   "wiggles": 0
+  },
+  {
+   "body_any": [
+    0.22743870178085718,
+    "link3 / person_1"
+   ],
+   "body_closing": [
+    0.3366338276668333,
+    "link1 / person_1"
+   ],
+   "closest": [
+    31.7,
+    -0.0,
+    -0.29,
+    0.0,
+    [
+     0.68,
+     0.04
+    ],
+    "stop",
+    "route"
+   ],
+   "contacts": 0,
+   "detour": 1.0680359154332888,
+   "dist": 6.367111227922804,
+   "err": [
+    -0.0005107138367522743,
+    -0.0020135925927220466,
+    0.16135107358522535
+   ],
+   "events": {
+    "aligns": 0,
+    "rejoins": 1,
+    "replans": 0,
+    "step_backs": 0
+   },
+   "extra_turn_deg": 281.74286848097006,
+   "goal": "pick",
+   "intrusions": 0,
+   "min_clear": 0.2249980964080009,
+   "min_clear_any": 0.10463528372215011,
+   "oscillations": 3,
+   "planned": [
+    5.961514155017667,
+    3.1419379482139087
+   ],
+   "realigns": 0,
+   "retries": 0,
+   "reversals": 8,
+   "state": "docked",
+   "stop_onsets": 11,
+   "stop_onsets_by": {
+    "approach": 1,
+    "route": 10
+   },
+   "stop_s": 3.0000000000000013,
+   "stops": 30,
+   "t": 46.199999999999996,
+   "t0": 42.800000000000004,
+   "turn_backs": 0,
+   "turned": 8.059278647220191,
+   "turned_by": {
+    "align": 0.10155328874996661,
+    "approach": 0.04355611109962387,
+    "docked": 0.00019875279452996608,
+    "route/far": 0.39819318632000655,
+    "route/standing": 6.037633825778386,
+    "route/walking": 1.467930183727785,
+    "undock": 0.01021329874991439
+   },
+   "warn_s": 4.899999999999999,
+   "warn_s_by": {
+    "route": 4.899999999999999
+   },
+   "warns": 49,
+   "wiggle_deg": 2.8785768827806115,
+   "wiggles": 4
+  },
+  {
+   "body_any": [
+    0.2283640659104273,
+    "cbox_1 / person_2"
+   ],
+   "body_closing": [
+    0.36998940299501437,
+    "link0 / person_1"
+   ],
+   "closest": [
+    11.3,
+    0.08,
+    0.01,
+    1.2,
+    [
+     0.74,
+     -0.19
+    ],
+    "clear",
+    "route"
+   ],
+   "contacts": 0,
+   "detour": 1.048847576939583,
+   "dist": 6.2462386245808865,
+   "err": [
+    0.001700749629407028,
+    0.0043972403373988556,
+    -0.09909230725935911
+   ],
+   "events": {
+    "aligns": 0,
+    "rejoins": 0,
+    "replans": 0,
+    "step_backs": 0
+   },
+   "extra_turn_deg": 162.80766186704534,
+   "goal": "place",
+   "intrusions": 0,
+   "min_clear": 0.28414254786137366,
+   "min_clear_any": 0.09893305923930526,
+   "oscillations": 0,
+   "planned": [
+    5.95533494276327,
+    3.138735405054242
+   ],
+   "realigns": 0,
+   "retries": 0,
+   "reversals": 4,
+   "state": "docked",
+   "stop_onsets": 2,
+   "stop_onsets_by": {
+    "route": 2
+   },
+   "stop_s": 0.30000000000000004,
+   "stops": 3,
+   "t": 37.10000000000001,
+   "t0": 89.0,
+   "turn_backs": 0,
+   "turned": 5.980265152107802,
+   "turned_by": {
+    "approach": 0.056562446143052725,
+    "docked": 3.262722089480974e-05,
+    "route/far": 0.03827593131756224,
+    "route/standing": 5.175747041997371,
+    "route/walking": 0.6972527512338238,
+    "undock": 0.012394354195097268
+   },
+   "warn_s": 0.2,
+   "warn_s_by": {
+    "route": 0.2
+   },
+   "warns": 2,
+   "wiggle_deg": 26.989067133753313,
+   "wiggles": 1
+  }
+ ],
+ "trajectory_sha256": "628123cad505e604750a9b3e8f6465e26de1a2d8c5840c5ac67ee68fcad16396"
+}

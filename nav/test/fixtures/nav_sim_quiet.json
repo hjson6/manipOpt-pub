@@ -1,0 +1,266 @@
+{
+ "args": {
+  "accel": 0.5,
+  "arm": "carry",
+  "base_safety": 1.0,
+  "box": true,
+  "conditions": [],
+  "crowd": 0,
+  "drives": 4,
+  "fusion": "ekf",
+  "goals": [
+   "pick",
+   "place"
+  ],
+  "map": "stations",
+  "no_person_margin": false,
+  "people": "stations",
+  "people_speed": 1.0,
+  "scan_latency": 0.02,
+  "seed": 0,
+  "speed": 1.0,
+  "stop_safety": null,
+  "teach": false
+ },
+ "arrived": 4,
+ "drive_scores": [
+  {
+   "body_any": [
+    null,
+    ""
+   ],
+   "body_closing": [
+    null,
+    ""
+   ],
+   "closest": null,
+   "contacts": 0,
+   "detour": 1.0110190813721525,
+   "dist": 2.8550103368347126,
+   "err": [
+    -0.002012734892954394,
+    0.007291739893513727,
+    -0.21500627691350246
+   ],
+   "events": {
+    "aligns": 0,
+    "rejoins": 0,
+    "replans": 0,
+    "step_backs": 0
+   },
+   "extra_turn_deg": 0.7413279667483837,
+   "goal": "pick",
+   "intrusions": 0,
+   "min_clear": null,
+   "min_clear_any": null,
+   "oscillations": 0,
+   "planned": [
+    2.8238936232142127,
+    1.5670940142016252
+   ],
+   "realigns": 0,
+   "retries": 0,
+   "reversals": 0,
+   "state": "docked",
+   "stop_onsets": 1,
+   "stop_onsets_by": {
+    "approach": 1
+   },
+   "stop_s": 0.1,
+   "stops": 1,
+   "t": 10.5,
+   "t0": 0.0,
+   "turn_backs": 0,
+   "turned": 1.5800326280584995,
+   "turned_by": {
+    "approach": 0.058712204025427095,
+    "docked": 3.8782901410794324e-05,
+    "route/far": 1.5212816411316616
+   },
+   "warn_s": 0.0,
+   "warn_s_by": {},
+   "warns": 0,
+   "wiggle_deg": 0.0,
+   "wiggles": 0
+  },
+  {
+   "body_any": [
+    null,
+    ""
+   ],
+   "body_closing": [
+    null,
+    ""
+   ],
+   "closest": null,
+   "contacts": 0,
+   "detour": 1.0124073183768973,
+   "dist": 6.0389818328664475,
+   "err": [
+    0.0015303551428420548,
+    0.0035247512471920928,
+    -0.0865952482087228
+   ],
+   "events": {
+    "aligns": 0,
+    "rejoins": 0,
+    "replans": 0,
+    "step_backs": 0
+   },
+   "extra_turn_deg": 12.785121545213649,
+   "goal": "place",
+   "intrusions": 0,
+   "min_clear": null,
+   "min_clear_any": null,
+   "oscillations": 0,
+   "planned": [
+    5.964972519705024,
+    3.1323712844580798
+   ],
+   "realigns": 0,
+   "retries": 0,
+   "reversals": 0,
+   "state": "docked",
+   "stop_onsets": 0,
+   "stop_onsets_by": {},
+   "stop_s": 0.0,
+   "stops": 0,
+   "t": 19.6,
+   "t0": 10.5,
+   "turn_backs": 0,
+   "turned": 3.355513750689723,
+   "turned_by": {
+    "approach": 0.08220275128333565,
+    "docked": 5.9005888501051373e-05,
+    "route/far": 3.2591256000348743,
+    "undock": 0.014126393483012034
+   },
+   "warn_s": 0.0,
+   "warn_s_by": {},
+   "warns": 0,
+   "wiggle_deg": 0.0,
+   "wiggles": 0
+  },
+  {
+   "body_any": [
+    null,
+    ""
+   ],
+   "body_closing": [
+    null,
+    ""
+   ],
+   "closest": null,
+   "contacts": 0,
+   "detour": 1.0177755898431284,
+   "dist": 6.070126377376883,
+   "err": [
+    0.0004096205951881198,
+    0.005521556918231418,
+    -0.06490653535901038
+   ],
+   "events": {
+    "aligns": 0,
+    "rejoins": 0,
+    "replans": 0,
+    "step_backs": 0
+   },
+   "extra_turn_deg": 11.480426670845956,
+   "goal": "pick",
+   "intrusions": 0,
+   "min_clear": null,
+   "min_clear_any": null,
+   "oscillations": 0,
+   "planned": [
+    5.964110790191463,
+    3.141447204617764
+   ],
+   "realigns": 0,
+   "retries": 0,
+   "reversals": 0,
+   "state": "docked",
+   "stop_onsets": 1,
+   "stop_onsets_by": {
+    "approach": 1
+   },
+   "stop_s": 0.1,
+   "stops": 1,
+   "t": 21.200000000000003,
+   "t0": 30.1,
+   "turn_backs": 0,
+   "turned": 3.341818449557797,
+   "turned_by": {
+    "approach": 0.0725587829872758,
+    "docked": 2.212867497641824e-05,
+    "route/far": 3.2611725596382017,
+    "undock": 0.008064978257343203
+   },
+   "warn_s": 2.400000000000001,
+   "warn_s_by": {
+    "route": 2.400000000000001
+   },
+   "warns": 24,
+   "wiggle_deg": 0.0,
+   "wiggles": 0
+  },
+  {
+   "body_any": [
+    null,
+    ""
+   ],
+   "body_closing": [
+    null,
+    ""
+   ],
+   "closest": null,
+   "contacts": 0,
+   "detour": 1.0127717976074713,
+   "dist": 6.038560381336202,
+   "err": [
+    0.0020145568691880555,
+    0.002812568971717333,
+    -0.04724020424812215
+   ],
+   "events": {
+    "aligns": 0,
+    "rejoins": 0,
+    "replans": 0,
+    "step_backs": 0
+   },
+   "extra_turn_deg": 13.225334286011828,
+   "goal": "place",
+   "intrusions": 0,
+   "min_clear": null,
+   "min_clear_any": null,
+   "oscillations": 0,
+   "planned": [
+    5.9624096915034945,
+    3.136357884026662
+   ],
+   "realigns": 0,
+   "retries": 0,
+   "reversals": 0,
+   "state": "docked",
+   "stop_onsets": 0,
+   "stop_onsets_by": {},
+   "stop_s": 0.0,
+   "stops": 0,
+   "t": 19.6,
+   "t0": 51.300000000000004,
+   "turn_backs": 0,
+   "turned": 3.3671835119944618,
+   "turned_by": {
+    "approach": 0.08376817563281769,
+    "docked": 7.673200167701566e-06,
+    "route/far": 3.2695592889916014,
+    "undock": 0.013848374169874944
+   },
+   "warn_s": 0.0,
+   "warn_s_by": {},
+   "warns": 0,
+   "wiggle_deg": 0.0,
+   "wiggles": 0
+  }
+ ],
+ "trajectory_sha256": "3bd458108d8a61d1293d9d91bf9c74b1595d6f76ae9189b7fcc22aaa24f3e420"
+}
