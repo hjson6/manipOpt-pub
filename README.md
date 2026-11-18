@@ -286,7 +286,7 @@ Still planned:
 - The MPC against the MoveIt method on the same task (`benchmarks/`): packing quality,
   completion time, reaction latency.
 
-  ## License
+## License
 
 Copyright (c) 2026 Hojin Song. All rights reserved.
 
