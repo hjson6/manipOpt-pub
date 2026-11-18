@@ -285,3 +285,12 @@ Still planned:
 - Success rates over many trials and obstacle variations.
 - The MPC against the MoveIt method on the same task (`benchmarks/`): packing quality,
   completion time, reaction latency.
+
+  ## License
+
+Copyright (c) 2026 Hojin Song. All rights reserved.
+
+This repository is published for viewing only. No license is granted to use,
+copy, modify, or distribute this code, in whole or in part, for any purpose,
+without the prior written permission of the copyright holder.
+
